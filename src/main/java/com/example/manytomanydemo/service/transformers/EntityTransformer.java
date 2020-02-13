@@ -15,6 +15,12 @@ public class EntityTransformer {
     public static Student toStudentEntity(StudentDTO studentDTO) {
         Student student = new Student();
         student.setStudentName(studentDTO.getName());
+        student.setStudentFatherName(studentDTO.getStudentFatherName());
+        student.setStudentMotherName(studentDTO.getStudentMotherName());
+        student.setStudentDob(studentDTO.getStudentDob());
+        student.setStudentAddress(studentDTO.getStudentAddress());
+        student.setStudentPhoneNumber(studentDTO.getStudentPhoneNumber());
+        student.setStudentRollNumber(studentDTO.getStudentRollNumber());
         return student;
     }
 }
