@@ -1,13 +1,18 @@
 package com.example.manytomanydemo.service.impl;
 
 import com.example.manytomanydemo.database.dao.StudentDao;
+import com.example.manytomanydemo.database.dao.SubjectDao;
 import com.example.manytomanydemo.database.entity.Student;
+import com.example.manytomanydemo.database.entity.Subject;
 import com.example.manytomanydemo.dto.StudentDTO;
 import com.example.manytomanydemo.service.StudentService;
 import com.example.manytomanydemo.service.transformers.DtoTransformer;
 import com.example.manytomanydemo.service.transformers.EntityTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -17,6 +22,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     StudentDao studentDao;
+
+    @Autowired
+    SubjectDao subjectDao;
 
     @Override
     public void studentCreate(StudentDTO studentDTO) {
@@ -42,6 +50,12 @@ public class StudentServiceImpl implements StudentService {
         Student student = convertStudentDtoToStudentEntity(studentDto);
         studentDao.updateStudent(studentRollNumber, student);
         return;
+    }
+
+    @Override
+    public List<Subject> getSubjectsOfStudent(String studentRollNumber) {
+        Student student = studentDao.getStudent(studentRollNumber);
+        return student.getSubjects();
     }
 
     private StudentDTO convertStudentEntityToStudentDto(Student student) {

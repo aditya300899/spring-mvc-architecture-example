@@ -1,7 +1,6 @@
 package com.example.manytomanydemo.database.dao;
 
 import com.example.manytomanydemo.database.entity.Subject;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 public interface SubjectDao {

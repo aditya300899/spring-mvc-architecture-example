@@ -55,8 +55,8 @@ public class Student {
             joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
             foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
-
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"student_id", "subject_id"})}
     )
     private List<Subject> subjects = new ArrayList<Subject>();
 }

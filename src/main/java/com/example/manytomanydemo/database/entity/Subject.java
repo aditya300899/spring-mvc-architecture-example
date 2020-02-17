@@ -1,5 +1,6 @@
 package com.example.manytomanydemo.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Subject {
     @Column(name = "subject_name")
     private String subjectName;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY,
         cascade =
                 {
@@ -34,7 +36,8 @@ public class Subject {
             joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
             foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
-            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT)
+            inverseForeignKey = @ForeignKey(ConstraintMode.CONSTRAINT),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"subject_id", "student_id"})}
 
     )
     private List<Student> students = new ArrayList<Student>();

@@ -1,16 +1,14 @@
 package com.example.manytomanydemo.controller;
-
-import com.example.manytomanydemo.database.entity.Student;
+import com.example.manytomanydemo.database.entity.Subject;
 import com.example.manytomanydemo.dto.StudentDTO;
 import com.example.manytomanydemo.service.StudentService;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class StudentController {
@@ -19,29 +17,46 @@ public class StudentController {
     StudentService studentService;
 
     @PostMapping("/student")
-    public ResponseEntity<StudentDTO> createStudent(@RequestBody @Valid StudentDTO studentDTO){
+    public ResponseEntity<?> createStudent(@RequestBody @Valid StudentDTO studentDTO){
         try {
             studentService.studentCreate(studentDTO);
             return ResponseEntity.ok(studentDTO);
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.badRequest().body(studentDTO);
+            return ResponseEntity.badRequest().body("The student already exists.");
         }
     }
 
     @GetMapping("/student")
-    public StudentDTO getStudent(@RequestParam String rollNumber){
-        return studentService.getStudent(rollNumber);
+    public ResponseEntity<?> getStudent(@RequestParam String rollNumber){
+        try {
+            return ResponseEntity.ok(studentService.getStudent(rollNumber));
+        }catch (NullPointerException e){
+            return ResponseEntity.badRequest().body("the student doesn't exist.");
+        }
     }
 
     @DeleteMapping("/student/{studentRollNumber}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable String studentRollNumber){
-        studentService.deleteStudent(studentRollNumber);
-        return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+    public ResponseEntity<?> deleteStudent(@PathVariable String studentRollNumber){
+        try {
+            studentService.deleteStudent(studentRollNumber);
+            return ResponseEntity.ok("Student successfully deleted.");
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body("Student doesn't exist by this roll number.");
+        }
     }
 
     @PutMapping("/student/{studentRollNumber}")
-    public ResponseEntity<Void> updateStudent(@PathVariable String studentRollNumber, @RequestBody StudentDTO studentDto){
-        studentService.updateStudent(studentRollNumber, studentDto);
-        return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
+    public ResponseEntity<?> updateStudent(@PathVariable String studentRollNumber, @RequestBody StudentDTO studentDto){
+        try {
+            studentService.updateStudent(studentRollNumber, studentDto);
+            return ResponseEntity.ok("Student updated");
+        }catch (NullPointerException e){
+            return ResponseEntity.badRequest().body("Student doesn't exist.");
+        }
+    }
+
+    @GetMapping("/student/subjects")
+    public List<Subject> getSubjectsOfStudent(@RequestParam String studentRollNumber){
+        return studentService.getSubjectsOfStudent(studentRollNumber);
     }
 }

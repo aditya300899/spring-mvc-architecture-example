@@ -6,6 +6,9 @@ import com.example.manytomanydemo.database.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
+@Transactional
 @Service
 public class StudentDaoImpl implements StudentDao {
 
@@ -25,7 +28,6 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void deleteStudent(String studentRollNumber) {
         Student student = studentRepository.findByStudentRollNumber(studentRollNumber);
-//      student.setSubjects(new ArrayList<>());
         studentRepository.delete(student);
         return;
     }

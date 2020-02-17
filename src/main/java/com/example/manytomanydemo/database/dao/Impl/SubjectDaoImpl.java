@@ -1,7 +1,6 @@
 package com.example.manytomanydemo.database.dao.Impl;
 
 import com.example.manytomanydemo.database.dao.SubjectDao;
-import com.example.manytomanydemo.database.entity.Student;
 import com.example.manytomanydemo.database.entity.Subject;
 import com.example.manytomanydemo.database.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,13 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+@Transactional
 @Service
 public class SubjectDaoImpl implements SubjectDao {
 
     @Autowired
     SubjectRepository subjectRepository;
-    @Transactional
+
     public Subject subjectCreate(Subject subject) throws DataIntegrityViolationException{
             return subjectRepository.save(subject);
     }
@@ -39,5 +39,6 @@ public class SubjectDaoImpl implements SubjectDao {
         subjectRepository.save(subject1);
         return;
     }
+
 
 }

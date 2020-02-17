@@ -13,6 +13,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.example.manytomanydemo.database.entity.Subject;
 
+import java.util.List;
+
 @Service
 public class SubjectServiceImpl implements SubjectService {
     @Autowired
@@ -26,9 +28,6 @@ public class SubjectServiceImpl implements SubjectService {
     public void subjectCreate(SubjectDTO subjectDTO) throws DataIntegrityViolationException {
             Subject subject = convertSubjectDtoToSubjectEntity(subjectDTO);
             Subject createdSubject = subjectDao.subjectCreate(subject);
-//        }catch (Exception e){
-//            System.out.println("Hello there >>>>>>>");
-//        }
     }
 
     @Override
@@ -39,9 +38,11 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void addStudentToSubject(AddStudentToSubjectRequest request) {
+    public void addStudentToSubject(AddStudentToSubjectRequest request) throws NullPointerException {
         Subject subject = subjectDao.getSubject(request.getSubjectName());
         Student student = studentDao.getStudent(request.getStudentRollNumber());
+        if(student == null || subject == null)
+            throw new NullPointerException();
         subject.getStudents().add(student);
         subjectDao.subjectCreate(subject);
     }
@@ -67,6 +68,12 @@ public class SubjectServiceImpl implements SubjectService {
         subject.getStudents().remove(student);
         subjectDao.subjectCreate(subject);
         return;
+    }
+
+    @Override
+    public List<Student> getStudentsOfSubject(String subjectName) {
+        Subject subject = subjectDao.getSubject(subjectName);
+        return subject.getStudents();
     }
 
     private SubjectDTO convertSubjectEntityToSubjectDto(Subject subject) {
